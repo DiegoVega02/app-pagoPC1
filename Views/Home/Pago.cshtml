@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Pago";
+}
+
+<h1>Formulario de Pago</h1>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+<form method="post" action="/Home/Pago">
+<body>
+    <label for="card-number">Número de tarjeta de crédito:</label>
+  <input type="text" id="card-number" name="card-number" required>
+  <br>
+  <br>
+  <label for="expiration-date">Fecha de vencimiento (MM/AA):</label>
+  <input type="text" id="expiration-date" name="expiration-date" pattern="\d\d/\d\d" required>
+  <br>
+  <br>
+  <label for="amount">Monto a pagar:</label>
+  <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+  <br>
+  <br>
+  <label for="days-late">Días de retraso:</label>
+  <input type="number" id="days-late" name="days-late" min="0">
+  <br>
+  <br>
+  <button type="button" onclick="calculateLateFee()">Calcular cargo por mora</button>
+  <br>
+  <br>
+  <label for="late-fee">Cargo por mora:</label>
+  <input type="number" id="late-fee" name="late-fee" step="0.01" min="0" readonly>
+  <br>
+  <br>
+  <button type="submit">Pagar monto</button>
+  </body>
+</form>
+
+<script>
+function calculateLateFee() {
+  const amount = document.getElementById('amount').value;
+  const daysLate = document.getElementById('days-late').value;
+  const interestRate = 0.005; // Tasa de interés diaria (0.5%)
+
+  const lateFee = amount * (interestRate * daysLate);
+
+  document.getElementById('late-fee').value = lateFee.toFixed(2);
+}
+</script>
+
+@if (ViewBag.Result != null)
+{
+    <h2>Result: @ViewBag.Result</h2>
+}
